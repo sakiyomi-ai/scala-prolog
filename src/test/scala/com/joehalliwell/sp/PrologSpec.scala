@@ -1,22 +1,22 @@
 import com.joehalliwell.sp.{Atom, Prolog}
-import org.specs2.matcher.ParserMatchers
-import org.specs2.mutable.Specification
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should._
 
-
-class PrologParserTest extends Specification with ParserMatchers {
+class PrologParserTest extends AnyFlatSpec with Matchers {
   val parsers = new Prolog().parser
 
-  "term" should {
-    "succeed to recognize 'hello'" in {
-      parsers.exp must succeedOn(parsers.reader("hello")).withResult(Atom("hello"))
+  "term" should
+  "succeed to recognize 'hello'" in {
+    parsers.parse("hello.") match {
+      case Right(result) => result should be(Atom("hello"))
+      case _             => fail()
     }
   }
 
-  "exp" should {
-    "handle commas correctly" in {
-      val ast = parsers.parse("X is 1 + 2; Y is 3 + 4.")
-      println(ast)
-      1 must_==(1)
-    }
+  "exp" should
+  "handle commas correctly" in {
+    val ast = parsers.parse("X is 1 + 2; Y is 3 + 4.")
+    println(ast)
+    1 should be(1)
   }
 }
